@@ -13,7 +13,7 @@ if (process.env.APP_ENV === 'development') {
 	module.exports = dbLocal
 } else {
 	const dbHeroku = new Client({
-		connectionString: process.env.DATABASE_URL, 
+		connectionString: process.env.DATABASE_URL,
 		ssl: {
 			rejectUnauthorized: false,
 		},
