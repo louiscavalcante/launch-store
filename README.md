@@ -1,2 +1,0 @@
-# launch-store
-Store WebApp
