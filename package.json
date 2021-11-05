@@ -1,0 +1,24 @@
+{
+	"name": "launch-store",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"start": "node src/server.js",
+		"dev": "npm-run-all -p nodemon browser-sync",
+		"nodemon": "cross-env APP_ENV=development nodemon --legacy-watch --watch public --watch src src/server.js",
+		"browser-sync": "browser-sync start --proxy http://localhost:5000 --files 'public, src' --no-notify --reload-delay 500"
+	},
+	"dependencies": {
+		"express": "^4.17.1",
+		"method-override": "^3.0.0",
+		"nunjucks": "^3.2.3",
+		"pg": "^8.7.1"
+	},
+	"devDependencies": {
+		"browser-sync": "^2.27.5",
+		"cross-env": "^7.0.3",
+		"nodemon": "^2.0.13",
+		"npm-run-all": "^4.1.5"
+	}
+}
