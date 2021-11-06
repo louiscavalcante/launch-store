@@ -265,7 +265,7 @@ form .item #photos-preview {
 form .item #photos-preview img {
 	width: 100%;
 	height: 150px;
-	object-fit: cover;
+	object-fit: contain;
 }
 
 #photos-preview .photo {
@@ -318,7 +318,7 @@ form .item #photos-preview img {
 .product-single .highlight > img {
 	width: 100%;
 	height: 280px;
-	object-fit: cover;
+	object-fit: contain;
 	object-position: 50% 50%;
 	border: 1px solid #efefef;
 	cursor: zoom-in;
@@ -333,7 +333,7 @@ form .item #photos-preview img {
 .product-single .gallery-preview img {
 	height: 100px;
 	width: 100%;
-	object-fit: cover;
+	object-fit: contain;
 	opacity: 0.6;
 	cursor: pointer;
 	transition: 200ms;
@@ -365,24 +365,9 @@ form .item #photos-preview img {
 	left: 0;
 	bottom: 0;
 	right: 0;
-	background-color: white;
-	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
 	width: 90%;
 	height: 90%;
 	object-fit: contain;
-}
-
-.product-single .highlight a.lightbox-close {
-	width: 50px;
-	height: 50px;
-	background: white;
-	position: absolute;
-	top: -80px;
-	right: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: 400ms;
 }
 
 /*! PRODUCT SINGLE INFO */
@@ -403,6 +388,14 @@ form .item #photos-preview img {
 	font-size: 12px;
 	line-height: 22px;
 	letter-spacing: 0.4px;
+}
+
+.product-single .info .description {
+	font-size: 14px;
+	line-height: 22px;
+	color: #333;
+	margin-top: 8px;
+	white-space: pre-wrap;
 }
 
 /*! PRICE-BUY */
