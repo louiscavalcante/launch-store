@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
+        "debug": "cross-env APP_ENV=development nodemon --inspect=0.0.0.0:9229 src/server.js",
 		"start": "node src/server.js",
 		"dev": "npm-run-all -p nodemon browser-sync",
 		"nodemon": "cross-env APP_ENV=development nodemon --legacy-watch --watch public --watch src src/server.js",
@@ -12,6 +13,7 @@
 	"dependencies": {
 		"express": "^4.17.1",
 		"method-override": "^3.0.0",
+		"multer": "^1.4.3",
 		"nunjucks": "^3.2.3",
 		"pg": "^8.7.1"
 	},

@@ -23,7 +23,7 @@ if (process.env.APP_ENV === 'development') {
 	dbHeroku
 		.connect()
 		.then(() => console.log('Connected to Heroku Database!'))
-		.catch(err => console.error(red('Heroku Database Connection Error:', err)))
+		.catch(err => console.error('Heroku Database Connection Error:', err))
 
 	module.exports = dbHeroku
 }
