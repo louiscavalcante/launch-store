@@ -1,7 +1,7 @@
 const Category = require('../models/category.js')
 const Product = require('../models/product.js')
 const File = require('../models/file.js')
-const { formatPrice, date } = require('../lib/utils.js')
+const { formatPrice, date } = require('../../lib/utils.js')
 
 module.exports = {
 	create(req, res) {
