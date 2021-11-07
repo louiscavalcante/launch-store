@@ -2,11 +2,16 @@ const express = require('express')
 const routes = express.Router()
 const multer = require('./app/middlewares/multer.js')
 const ProductController = require('./app/controllers/product_controller.js')
+const HomeController = require('./app/controllers/home_controller.js')
+const SearchController = require('./app/controllers/search_controller.js')
 
-routes.get('/', function (req, res) {
-	return res.render('layout')
-})
+//! Home
+routes.get('/', HomeController.index)
 
+//! Search
+routes.get('/products/search', SearchController.index)
+
+//! Products
 routes.get('/products/create', ProductController.create)
 routes.get('/products/:id/edit', ProductController.edit)
 routes.get('/products/:id', ProductController.show)
