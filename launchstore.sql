@@ -136,6 +136,43 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    name text NOT NULL,
+    email text NOT NULL,
+    password text NOT NULL,
+    cpf_cnpj text NOT NULL,
+    cep text,
+    address text,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
 -- Name: categories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -157,12 +194,20 @@ ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.categories (id, name) FROM stdin;
 1	Eletrônicos
 2	Comida
+3	Automóveis
 \.
 
 
@@ -188,7 +233,16 @@ COPY public.files (id, name, path, product_id) FROM stdin;
 
 COPY public.products (id, category_id, user_id, name, description, old_price, price, quantity, status, created_at, updated_at) FROM stdin;
 2	1	\N	Redmi Note 10 64GB 4GB RAM - Green	- Super AMOLED de 6,35 polegadas\r\n- 450 nits (tipo), 1100 nits (pico)\r\n- Corning Gorilla Glass 3\r\n- 64 GB de RAM | Qualcomm SDM678 Snapdragon 678 (11 nm)\r\n- Octa-core (2 x 2,2 GHz Kryo 460 Gold e 6 x 1,7 GHz Kryo 460 Silver)\r\n- Li-Po 5000 mAh, no removível\r\n- Carregamento rápido de 33 W, 50% em 25 minutos, 100% em 74 minutos\r\n- Celulares desbloqueados de fábrica so compatíveis com a maioria das operadoras GSM.\r\n- Esteja ciente de que no so compatíveis com operadoras CDMA	119999	109999	10	1	2021-11-05 11:36:14.062026	2021-11-06 09:24:49.592068
-1	1	\N	Notebook Acer Aspire 3	- Modelo: A315-23-R6HC\r\n- AMD Ryzen 5\r\n- Gráfico integrado AMD Radeon Vega 8\r\n- 8GB RAM\r\n- 512GB SSD	325999	315999	0	1	2021-11-05 10:25:21.729615	2021-11-06 09:28:01.595065
+1	1	\N	Notebook Acer Aspire 3	- Modelo: A315-23-R6HC\r\n- AMD Ryzen 5\r\n- Gráfico integrado AMD Radeon Vega 8\r\n- 8GB RAM\r\n- 512GB SSD	315999	315999	0	1	2021-11-05 10:25:21.729615	2021-11-07 00:35:43.309803
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.users (id, name, email, password, cpf_cnpj, cep, address, created_at, updated_at) FROM stdin;
+1	Luiz Cavalcante	luiz@test.com.br	123456	00000000000	00000000	test	2021-11-08 00:32:37.422266	2021-11-08 00:32:37.422266
 \.
 
 
@@ -196,7 +250,7 @@ COPY public.products (id, category_id, user_id, name, description, old_price, pr
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.categories_id_seq', 2, true);
+SELECT pg_catalog.setval('public.categories_id_seq', 3, true);
 
 
 --
@@ -211,6 +265,13 @@ SELECT pg_catalog.setval('public.files_id_seq', 22, true);
 --
 
 SELECT pg_catalog.setval('public.products_id_seq', 8, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 
 --
@@ -238,6 +299,30 @@ ALTER TABLE ONLY public.products
 
 
 --
+-- Name: users users_cpf_cnpj_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_cpf_cnpj_key UNIQUE (cpf_cnpj);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: products set_timestamp; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -258,6 +343,14 @@ ALTER TABLE ONLY public.files
 
 ALTER TABLE ONLY public.products
     ADD CONSTRAINT products_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
+-- Name: products products_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
