@@ -1,0 +1,25 @@
+{% extends 'layout.html' %} {% block content %}
+
+<section class="user-dashboard container form">
+	<form method="POST">
+		<div class="header">
+			<h3>Detalhes</h3>
+		</div>
+
+		<div class="fields">{% include 'user/fields.html' %}</div>
+
+		<input type="hidden" name="id" value="{{ user.id }}" />
+
+		<button class="button edit" formaction="/users?_method=PUT" type="submit">Atualizar</button>
+		<button
+			id="form-delete"
+			class="button delete"
+			formaction="/users?_method=DELETE"
+			type="submit"
+		>
+			Delete
+		</button>
+	</form>
+</section>
+
+{% endblock %}
