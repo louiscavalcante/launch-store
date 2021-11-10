@@ -7,7 +7,7 @@
 		"start": "node src/server.js",
 		"debug": "cross-env APP_ENV=development nodemon --inspect=0.0.0.0:9229 src/server.js",
 		"dev": "npm-run-all -p nodemon browser-sync",
-		"nodemon": "cross-env APP_ENV=development nodemon --watch public --watch src --watch package.json src/server.js",
+		"nodemon": "cross-env NODE_ENV=development nodemon --watch public --watch src --watch package.json src/server.js",
 		"browser-sync": "browser-sync start --proxy http://localhost:5000 --files 'public, src' --no-notify --reload-delay 700"
 	},
 	"dependencies": {
