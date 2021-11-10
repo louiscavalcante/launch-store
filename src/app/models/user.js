@@ -1,5 +1,4 @@
 const db = require('../../config/db.js')
-const { update } = require('../controllers/user_controller.js')
 const { encrypt } = require('../../lib/encryption_handler.js')
 
 module.exports = {
