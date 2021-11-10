@@ -1,6 +1,6 @@
 const db = require('../../config/db.js')
-const { hash } = require('bcryptjs')
 const { update } = require('../controllers/user_controller.js')
+const { encrypt } = require('../../lib/encryption_handler.js')
 
 module.exports = {
 	async findOne(filters) {
@@ -37,13 +37,13 @@ module.exports = {
 			RETURNING id
 		`
 
-			// password hash
-			const passwordHash = await hash(data.password, 8)
+			// password encryption
+			const passwordEncrypted = encrypt(data.password)
 
 			const values = [
 				data.name,
 				data.email,
-				passwordHash,
+				passwordEncrypted,
 				data.cpf_cnpj.replace(/\D/g, ''),
 				data.cep.replace(/\D/g, ''),
 				data.address,

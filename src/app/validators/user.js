@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const { compare } = require('bcryptjs')
+const { decrypt } = require('../../lib/encryption_handler.js')
 
 function checkAllfields(body) {
 	const keys = Object.keys(body)
@@ -78,9 +78,10 @@ async function update(req, res, next) {
 
 	const user = await User.findOne({ where: { id } })
 
-	const passed = await compare(password, user.password)
+	// password decryption
+	const decryptPassword = decrypt(user.password)
 
-	if (!passed)
+	if (decryptPassword != password)
 		return res.render('user/index', {
 			user: req.body,
 			error: 'Senha incorreta.',
