@@ -1,5 +1,5 @@
 const db = require('../../config/db.js')
-const { encrypt } = require('../../lib/encryption_handler.js')
+const { encryptAES } = require('../../lib/encryption_handler.js')
 
 module.exports = {
 	async findOne(filters) {
@@ -36,13 +36,10 @@ module.exports = {
 			RETURNING id
 		`
 
-			// password encryption
-			const passwordEncrypted = encrypt(data.password, process.env.ENCRYPTION_KEY)
-
 			const values = [
 				data.name,
 				data.email,
-				passwordEncrypted,
+				encryptAES(data.password),
 				data.cpf_cnpj.replace(/\D/g, ''),
 				data.cep.replace(/\D/g, ''),
 				data.address,

@@ -136,6 +136,17 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
+-- Name: session; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.session (
+    sid character varying NOT NULL,
+    sess json NOT NULL,
+    expire timestamp(6) without time zone NOT NULL
+);
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -238,11 +249,20 @@ COPY public.products (id, category_id, user_id, name, description, old_price, pr
 
 
 --
+-- Data for Name: session; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.session (sid, sess, expire) FROM stdin;
+26BJHng6DF80GX2ziDUI2S2bDsNz-MyM	{"cookie":{"originalMaxAge":2592000000,"expires":"2021-12-10T13:05:49.876Z","httpOnly":true,"path":"/"},"userId":30}	2021-12-10 09:24:41
+\.
+
+
+--
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.users (id, name, email, password, cpf_cnpj, cep, address, created_at, updated_at) FROM stdin;
-1	Luiz Cavalcante	luiz@test.com.br	123456	00000000000	00000000	test	2021-11-08 00:32:37.422266	2021-11-08 00:32:37.422266
+29	Luiz Cavalcante	luiz@test.com	553246736447566b58312b3367474c566b6477345a576575417567754c74716d78664565433830674b2f6f3d	02309480923849	09823094	endereco	2021-11-10 08:53:13.999435	2021-11-10 08:53:13.999435
 \.
 
 
@@ -271,7 +291,7 @@ SELECT pg_catalog.setval('public.products_id_seq', 8, true);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_seq', 31, true);
 
 
 --
@@ -299,6 +319,14 @@ ALTER TABLE ONLY public.products
 
 
 --
+-- Name: session session_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.session
+    ADD CONSTRAINT session_pkey PRIMARY KEY (sid);
+
+
+--
 -- Name: users users_cpf_cnpj_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -320,6 +348,13 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: IDX_session_expire; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "IDX_session_expire" ON public.session USING btree (expire);
 
 
 --

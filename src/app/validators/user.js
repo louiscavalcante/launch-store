@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const { decrypt } = require('../../lib/encryption_handler.js')
+const { decryptAES } = require('../../lib/encryption_handler.js')
 
 function checkAllfields(body) {
 	const keys = Object.keys(body)
@@ -79,7 +79,7 @@ async function update(req, res, next) {
 	const user = await User.findOne({ where: { id } })
 
 	// password decryption
-	const passwordDecrypted = decrypt(user.password, process.env.ENCRYPTION_KEY)
+	const passwordDecrypted = decryptAES(user.password)
 
 	if (passwordDecrypted != password)
 		return res.render('user/index', {
