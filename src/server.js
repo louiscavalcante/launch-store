@@ -3,7 +3,6 @@ const nunjucks = require('nunjucks')
 const routes = require('./routes')
 const methodOverride = require('method-override')
 const session = require('./config/session.js')
-require('dotenv').config()
 
 const server = express()
 const PORT = process.env.PORT || 5000
