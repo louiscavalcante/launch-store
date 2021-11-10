@@ -79,9 +79,9 @@ async function update(req, res, next) {
 	const user = await User.findOne({ where: { id } })
 
 	// password decryption
-	const decryptPassword = decrypt(user.password)
+	const passwordDecrypted = decrypt(user.password, process.env.ENCRYPTION_KEY)
 
-	if (decryptPassword != password)
+	if (passwordDecrypted != password)
 		return res.render('user/index', {
 			user: req.body,
 			error: 'Senha incorreta.',

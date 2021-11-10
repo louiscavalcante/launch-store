@@ -37,7 +37,7 @@ module.exports = {
 		`
 
 			// password encryption
-			const passwordEncrypted = encrypt(data.password)
+			const passwordEncrypted = encrypt(data.password, process.env.ENCRYPTION_KEY)
 
 			const values = [
 				data.name,
