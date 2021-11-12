@@ -13,7 +13,7 @@
 	color: white;
 	top: 0;
 	opacity: 1;
-	animation: hidemessage 400ms 4s ease-out forwards;
+	animation: hidemessage 400ms 5s ease-out forwards;
 }
 
 .messages.error {

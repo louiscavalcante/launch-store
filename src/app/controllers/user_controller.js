@@ -40,8 +40,8 @@ module.exports = {
 				user: req.body,
 				success: 'Usuário atualizado com sucesso!',
 			})
-		} catch (error) {
-			console.error(error)
+		} catch (err) {
+			console.error(err)
 			return res.render('user/index', {
 				error: 'Aconteceu algum erro!',
 			})

@@ -79,7 +79,7 @@ async function update(req, res, next) {
 	const user = await User.findOne({ where: { id } })
 
 	// password decryption
-	const passwordDecrypted = decryptAES(user.password)
+	const passwordDecrypted = await decryptAES(user.password)
 
 	if (passwordDecrypted != password)
 		return res.render('user/index', {

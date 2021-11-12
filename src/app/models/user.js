@@ -35,11 +35,10 @@ module.exports = {
 			) VALUES ($1, $2, $3, $4, $5, $6)
 			RETURNING id
 		`
-
 			const values = [
 				data.name,
 				data.email,
-				encryptAES(data.password),
+				await encryptAES(data.password),
 				data.cpf_cnpj.replace(/\D/g, ''),
 				data.cep.replace(/\D/g, ''),
 				data.address,
