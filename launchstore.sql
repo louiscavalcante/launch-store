@@ -159,7 +159,9 @@ CREATE TABLE public.users (
     cep text,
     address text,
     created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now()
+    updated_at timestamp without time zone DEFAULT now(),
+    reset_token text,
+    reset_token_expires text
 );
 
 
@@ -235,8 +237,6 @@ COPY public.files (id, name, path, product_id) FROM stdin;
 20	1636205281069-computador02.jpg	public\\images\\1636205281069-computador02.jpg	1
 21	1636205281067-computador04.jpg	public\\images\\1636205281067-computador04.jpg	1
 22	1636205281068-computador03.jpg	public\\images\\1636205281068-computador03.jpg	1
-23	1636609322575-passarata-italiana.jpg	public\\images\\1636609322575-passarata-italiana.jpg	10
-24	1636609598655-passarata-italiana.jpg	public\\images\\1636609598655-passarata-italiana.jpg	11
 \.
 
 
@@ -247,8 +247,6 @@ COPY public.files (id, name, path, product_id) FROM stdin;
 COPY public.products (id, category_id, user_id, name, description, old_price, price, quantity, status, created_at, updated_at) FROM stdin;
 1	1	35	Notebook Acer Aspire 3	- Modelo: A315-23-R6HC\r\n- AMD Ryzen 5\r\n- Gráfico integrado AMD Radeon Vega 8\r\n- 8GB RAM\r\n- 512GB SSD	315999	315999	0	1	2021-11-05 10:25:21.729615	2021-11-11 01:39:07.611532
 2	1	35	Redmi Note 10 64GB 4GB RAM - Green	- Super AMOLED de 6,35 polegadas\r\n- 450 nits (tipo), 1100 nits (pico)\r\n- Corning Gorilla Glass 3\r\n- 64 GB de RAM | Qualcomm SDM678 Snapdragon 678 (11 nm)\r\n- Octa-core (2 x 2,2 GHz Kryo 460 Gold e 6 x 1,7 GHz Kryo 460 Silver)\r\n- Li-Po 5000 mAh, no removível\r\n- Carregamento rápido de 33 W, 50% em 25 minutos, 100% em 74 minutos\r\n- Celulares desbloqueados de fábrica so compatíveis com a maioria das operadoras GSM.\r\n- Esteja ciente de que no so compatíveis com operadoras CDMA	119999	109999	10	1	2021-11-05 11:36:14.062026	2021-11-11 01:39:10.501291
-10	2	\N	te	te2	1	1	1	1	2021-11-11 01:42:02.586156	2021-11-11 01:46:12.940134
-11	2	35	teeee	tete	1111	1111	1111	1	2021-11-11 01:46:38.662392	2021-11-11 01:46:38.662392
 \.
 
 
@@ -257,7 +255,6 @@ COPY public.products (id, category_id, user_id, name, description, old_price, pr
 --
 
 COPY public.session (sid, sess, expire) FROM stdin;
-FW_lFXyeqInZI0ZCSES_nToOuHI0VDx0	{"cookie":{"originalMaxAge":2592000000,"expires":"2021-12-11T05:24:44.672Z","httpOnly":true,"path":"/"},"userId":35}	2021-12-11 01:47:34
 \.
 
 
@@ -265,8 +262,8 @@ FW_lFXyeqInZI0ZCSES_nToOuHI0VDx0	{"cookie":{"originalMaxAge":2592000000,"expires
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.users (id, name, email, password, cpf_cnpj, cep, address, created_at, updated_at) FROM stdin;
-35	Luiz Cavalcante	luiz@test.com	553246736447566b5831387939304a67686163584164594c736476543466633573474559416d6577414b493d	29384908320843	32908409	endereco	2021-11-11 00:14:50.559782	2021-11-11 00:14:50.559782
+COPY public.users (id, name, email, password, cpf_cnpj, cep, address, created_at, updated_at, reset_token, reset_token_expires) FROM stdin;
+35	Luiz Cavalcante	luiz@test.com	553246736447566b583138376f36366b4d755375305135595a5461375843462b4a2f723459352b305031593d	29384908320843	32908409	endereco	2021-11-11 00:14:50.559782	2021-11-11 00:14:50.559782	24a384ab99267777200e7305a53cce8d424a7c48	1640013531941
 \.
 
 
@@ -281,21 +278,21 @@ SELECT pg_catalog.setval('public.categories_id_seq', 3, true);
 -- Name: files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.files_id_seq', 24, true);
+SELECT pg_catalog.setval('public.files_id_seq', 31, true);
 
 
 --
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 11, true);
+SELECT pg_catalog.setval('public.products_id_seq', 14, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 35, true);
+SELECT pg_catalog.setval('public.users_id_seq', 40, true);
 
 
 --
@@ -373,7 +370,7 @@ CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.products FOR EACH ROW EXECU
 --
 
 ALTER TABLE ONLY public.files
-    ADD CONSTRAINT files_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(id);
+    ADD CONSTRAINT files_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(id) ON DELETE CASCADE;
 
 
 --
@@ -389,7 +386,7 @@ ALTER TABLE ONLY public.products
 --
 
 ALTER TABLE ONLY public.products
-    ADD CONSTRAINT products_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT products_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
