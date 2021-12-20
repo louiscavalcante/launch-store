@@ -1,7 +1,7 @@
 const Category = require('../models/category.js')
 const Product = require('../models/product.js')
 const File = require('../models/file.js')
-const { formatPrice, date } = require('../lib/utils.js')
+const { formatPrice, date } = require('../../lib/utils.js')
 
 module.exports = {
 	create(req, res) {
@@ -24,6 +24,8 @@ module.exports = {
 		}
 
 		if (req.files.length == 0) return res.send('Please, send at least one image!')
+		
+		req.body.user_id = req.session.userId
 
 		let results = await Product.create(req.body)
 		const productId = results.rows[0].id

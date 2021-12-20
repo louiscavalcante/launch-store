@@ -13,6 +13,50 @@ const Mask = {
 			currency: 'BRL',
 		}).format(value / 100))
 	},
+	cpfCnpj(value) {
+		// permit only numbers
+		value = value.replace(/\D/g, '')
+
+		// limit total numbers
+		if (value.length > 14) {
+			value = value.slice(0, -1)
+		}
+
+		// check if is cpf or cnpj by length | cnpj = 11.222.333/0001-11
+		if (value.length > 11) {
+			// cnpj
+			value = value.replace(/(\d{2})(\d)/, '$1.$2')
+			// value = 11.222333444455
+
+			value = value.replace(/(\d{3})(\d)/, '$1.$2')
+			// value = 11.222.333444455
+
+			value = value.replace(/(\d{3})(\d)/, '$1/$2')
+			// value = 11.222.333/444455
+
+			value = value.replace(/(\d{4})(\d)/, '$1-$2')
+			// value = 11.222.333/4444-55
+		} else {
+			// cpf
+			value = value.replace(/(\d{3})(\d)/, '$1.$2')
+			value = value.replace(/(\d{3})(\d)/, '$1.$2')
+			value = value.replace(/(\d{3})(\d)/, '$1-$2')
+		}
+
+		return value
+	},
+	cep(value) {
+		value = value.replace(/\D/g, '')
+
+		// limit total numbers
+		if (value.length > 8) {
+			value = value.slice(0, -1)
+		}
+
+		value = value.replace(/(\d{5})(\d)/, '$1-$2')
+
+		return value
+	},
 }
 // O Mask é executado no FrontEnd como:
 // onkeydown="Mask.apply(this, 'formatBRL')"
@@ -164,5 +208,69 @@ const Lightbox = {
 		Lightbox.target.style.opacity = 0
 		Lightbox.target.style.top = '-100%'
 		Lightbox.target.style.bottom = 'initial'
+	},
+}
+
+//! -------------------- field validation
+const Validate = {
+	apply(input, func) {
+		Validate.clearErrors(input)
+
+		let results = Validate[func](input.value)
+		input.value = results.value
+
+		if (results.error) Validate.displayError(input, results.error)
+	},
+	displayError(input, error) {
+		const div = document.createElement('div')
+		div.classList.add('error')
+		div.innerHTML = error
+		input.parentNode.appendChild(div)
+
+		input.focus()
+	},
+	clearErrors(input) {
+		const errorDiv = input.parentNode.querySelector('.error')
+		if (errorDiv) errorDiv.remove()
+	},
+	isEmail(value) {
+		let error = null
+
+		const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+		if (!value.match(mailFormat)) error = 'Email inválido'
+
+		return {
+			error,
+			value,
+		}
+	},
+	isCpfCnpj(value) {
+		let error = null
+
+		const cleanValues = value.replace(/\D/g, '')
+
+		if (cleanValues.length > 11 && cleanValues.length !== 14) {
+			error = 'CNPJ inválido'
+		} else if (cleanValues.length < 12 && cleanValues.length !== 11) {
+			error = 'CPF inválido'
+		}
+
+		return {
+			error,
+			value,
+		}
+	},
+	isCep(value) {
+		let error = null
+
+		const cleanValues = value.replace(/\D/g, '')
+		
+		if (cleanValues.length !== 8) error = 'CEP incorreto'
+		
+		return {
+			error,
+			value,
+		}
 	},
 }

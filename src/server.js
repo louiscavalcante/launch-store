@@ -1,10 +1,18 @@
 const express = require('express')
 const nunjucks = require('nunjucks')
-const routes = require('./routes.js')
+const routes = require('./routes')
 const methodOverride = require('method-override')
+const session = require('./config/session.js')
 
 const server = express()
 const PORT = process.env.PORT || 5000
+
+server.use(session)
+// Creates a global variable called session
+server.use((req, res, next) => {
+	res.locals.session = req.session
+	next()
+})
 
 server.use(express.urlencoded({ extended: true }))
 server.use(express.static('public'))

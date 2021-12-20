@@ -1,6 +1,6 @@
 const { Pool, Client } = require('pg')
 
-if (process.env.APP_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
 	const dbLocal = new Pool({
 		user: 'postgres',
 		password: 'postgres',
