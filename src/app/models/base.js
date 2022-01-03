@@ -1,30 +1,39 @@
 const db = require('../../config/db.js')
 
+function find(filters, table) {
+	let query = `SELECT * FROM ${table}`
+
+	if (filters) {
+		Object.keys(filters).map(key => {
+			// WHERE | OR | AND
+			query += ` ${key}`
+
+			Object.keys(filters[key]).map(field => {
+				query += ` ${field} = '${filters[key][field]}'`
+			})
+		})
+	}
+
+	return db.query(query)
+}
+
 const Base = {
 	init({ table }) {
 		if (!table) throw new Error('Invalid Params')
 
 		this.table = table
 	},
-	async findOne(filters) {
-		let query = `SELECT * FROM ${this.table}`
-
-		Object.keys(filters).map(key => {
-			// WHERE | OR | AND
-			query = `${query}
-			${key}
-			`
-
-			Object.keys(filters[key]).map(field => {
-				query = `${query}
-				${field} = '${filters[key][field]}'
-				`
-			})
-		})
-
-		const results = await db.query(query)
-
+	async find(filters) {
+		const results = await find({ where: { id } }, this.table)
 		return results.rows[0]
+	},
+	async findOne(filters) {
+		const results = await find(filters, this.table)
+		return results.rows[0]
+	},
+	async findAll(filters) {
+		const results = await find(filters, this.table)
+		return results.rows
 	},
 	async create(fields) {
 		try {
