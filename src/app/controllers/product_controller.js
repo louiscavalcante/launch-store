@@ -1,3 +1,7 @@
+const Product = require('../models/product.js')
+const Category = require('../models/category.js')
+const File = require('../models/file.js')
+const { unlinkSync } = require('fs')
 const { formatPrice, date } = require('../../lib/utils.js')
 
 module.exports = {
@@ -24,7 +28,7 @@ module.exports = {
 			let { category_id, name, description, old_price, price, quantity, status } = req.body
 
 			// Chega como: R$ 1,23
-			price = data.price.replace(/\D/g, '')
+			price = price.replace(/\D/g, '')
 			// Entra no Database como: 123
 			// Tem que ser reformatado no controllers (divido por 100) para o retornar 1,23 no FrontEnd novamente...
 
@@ -39,34 +43,12 @@ module.exports = {
 				status: status || 1,
 			})
 
-			const filesPromise = req.files.map(file => File.create({ ...file, product_id }))
+			const filesPromise = req.files.map(file =>
+				File.create({ name: file.filename, path: file.path, product_id })
+			)
 			await Promise.all(filesPromise)
 
-			return res.redirect(`/products/${productId}/edit`)
-		} catch (err) {
-			console.error(err)
-		}
-	},
-	async edit(req, res) {
-		try {
-			const product = await Product.find(req.params.id)
-
-			if (!product) return res.send('Product not found!')
-
-			product.old_price = formatPrice(product.old_price)
-			product.price = formatPrice(product.price)
-
-			// get categories
-			const categories = await Category.findAll()
-
-			// get images
-			let files = await Product.files(product.id)
-			files = files.map(file => ({
-				...file,
-				src: `${req.protocol}://${req.headers.host}${file.path.replace('public', '')}`,
-			}))
-
-			return res.render('products/edit', { product, categories, files })
+			return res.redirect(`/products/${product_id}/edit`)
 		} catch (err) {
 			console.error(err)
 		}
@@ -94,6 +76,30 @@ module.exports = {
 			}))
 
 			return res.render('products/show', { product, files })
+		} catch (err) {
+			console.error(err)
+		}
+	},
+	async edit(req, res) {
+		try {
+			const product = await Product.find(req.params.id)
+
+			if (!product) return res.send('Product not found!')
+
+			product.old_price = formatPrice(product.old_price)
+			product.price = formatPrice(product.price)
+
+			// get categories
+			const categories = await Category.findAll()
+
+			// get images
+			let files = await Product.files(product.id)
+			files = files.map(file => ({
+				...file,
+				src: `${req.protocol}://${req.headers.host}${file.path.replace('public', '')}`,
+			}))
+
+			return res.render('products/edit', { product, categories, files })
 		} catch (err) {
 			console.error(err)
 		}
@@ -150,7 +156,17 @@ module.exports = {
 		}
 	},
 	async delete(req, res) {
+		const files = await Product.files(req.body.id)
+
 		await Product.delete(req.body.id)
+
+		files.map(file => {
+			try {
+				unlinkSync(file.path)
+			} catch (err) {
+				console.error(err)
+			}
+		})
 
 		return res.redirect('/products/create')
 	},

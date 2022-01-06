@@ -1,6 +1,6 @@
-const { unlinkSync } = require('fs')
 const User = require('../models/user.js')
 const Product = require('../models/product.js')
+const { unlinkSync } = require('fs')
 const { encryptAES } = require('../../lib/encryption_handler.js')
 const { formatCpfCnpj, formatCep } = require('../../lib/utils.js')
 
@@ -73,7 +73,7 @@ module.exports = {
 	},
 	async delete(req, res) {
 		try {
-			const products = await Product.findAll({ where: { user_id: req.body.id }})
+			const products = await Product.findAll({ where: { user_id: req.body.id } })
 
 			const allFilesPromise = products.map(product => Product.files(product.id))
 
@@ -82,8 +82,8 @@ module.exports = {
 			await User.delete(req.body.id)
 			req.session.destroy()
 
-			promiseResults = promiseResults.map(results => {
-				results.rows.map(file => {
+			promiseResults.map(results => {
+				results.map(file => {
 					try {
 						unlinkSync(file.path)
 					} catch (err) {
@@ -91,9 +91,6 @@ module.exports = {
 					}
 				})
 			})
-
-			await User.delete(req.body.id)
-			req.session.destroy()
 
 			return res.render('session/login', {
 				success: 'Usuário deletado com sucesso!',

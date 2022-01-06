@@ -23,7 +23,7 @@ const Base = {
 
 		this.table = table
 	},
-	async find(filters) {
+	async find(id) {
 		const results = await find({ where: { id } }, this.table)
 		return results.rows[0]
 	},
