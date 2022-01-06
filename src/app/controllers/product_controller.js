@@ -116,7 +116,7 @@ module.exports = {
 
 			if (req.files.length != 0) {
 				const newFilesPromise = req.files.map(file =>
-					File.create({ ...file, product_id: req.body.id })
+					File.create({ name: file.filename, path: file.path, product_id: req.body.id })
 				)
 				await Promise.all(newFilesPromise)
 			}
@@ -137,7 +137,7 @@ module.exports = {
 			if (req.body.old_price != req.body.price) {
 				const oldProduct = await Product.find(req.body.id)
 
-				req.body.old_price = oldProduct.rows[0].price
+				req.body.old_price = oldProduct.price
 			}
 
 			await Product.update(req.body.id, {

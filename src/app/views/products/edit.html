@@ -10,7 +10,7 @@
 
 		<input type="hidden" name="id" value="{{ product.id }}" />
 
-		<button class="button edit" formaction="/products?_method=PUT" type="submit">Atualizar</button>
+		<button class="button edit" formaction="/products?_method=PUT" formenctype="multipart/form-data" type="submit">Atualizar</button>
 		<button id="form-delete" class="button delete" formaction="/products?_method=DELETE" type="submit">
 			Delete
 		</button>
