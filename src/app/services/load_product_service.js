@@ -22,7 +22,7 @@ async function format(product) {
 
 	product.published = {
 		day: `${day}/${month}`,
-		hour: `${hour}h${minutes}`,
+		hour: `${hour}h`.padStart(3, '0') + `${minutes}m`.padStart(3, '0'),
 	}
 
 	return product

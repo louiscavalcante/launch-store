@@ -1,5 +1,6 @@
 const User = require('../models/user.js')
 const Product = require('../models/product.js')
+const LoadProductService = require('../services/load_product_service.js')
 const { unlinkSync } = require('fs')
 const { encryptAES } = require('../../lib/encryption_handler.js')
 const { formatCpfCnpj, formatCep } = require('../../lib/utils.js')
@@ -102,5 +103,12 @@ module.exports = {
 				error: 'Erro ao tentar deletar sua conta!',
 			})
 		}
+	},
+	async ads(req, res) {
+		const products = await LoadProductService.load('products', {
+			where: { user_id: req.session.userId },
+		})
+
+		return res.render('user/ads', { products })
 	},
 }

@@ -15,16 +15,6 @@ module.exports = {
 	},
 	async post(req, res) {
 		try {
-			const keys = Object.keys(req.body)
-
-			for (let key of keys) {
-				if (req.body[key] == '') {
-					return res.send('Please, fill all fields!')
-				}
-			}
-
-			if (req.files.length == 0) return res.send('Please, send at least one image!')
-
 			let { category_id, name, description, old_price, price, quantity, status } = req.body
 
 			// Chega como: R$ 1,23
@@ -55,7 +45,9 @@ module.exports = {
 	},
 	async show(req, res) {
 		try {
-			const product = await LoadProductService.load('product', { where: { id: req.params.id } })
+			const product = await LoadProductService.load('product', {
+				where: { id: req.params.id },
+			})
 
 			return res.render('products/show', { product })
 		} catch (err) {
@@ -64,7 +56,9 @@ module.exports = {
 	},
 	async edit(req, res) {
 		try {
-			const product = await LoadProductService.load('product', { where: { id: req.params.id } })
+			const product = await LoadProductService.load('product', {
+				where: { id: req.params.id },
+			})
 
 			// get categories
 			const categories = await Category.findAll()
@@ -76,14 +70,6 @@ module.exports = {
 	},
 	async put(req, res) {
 		try {
-			const keys = Object.keys(req.body)
-
-			for (let key of keys) {
-				if (req.body[key] == '' && key != 'removed_files') {
-					return res.send('Please, fill all fields!')
-				}
-			}
-
 			if (req.files.length != 0) {
 				const newFilesPromise = req.files.map(file =>
 					File.create({ name: file.filename, path: file.path, product_id: req.body.id })
