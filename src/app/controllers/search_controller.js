@@ -6,7 +6,7 @@ module.exports = {
 		try {
 			let { filter, category } = req.query
 
-			if (!filter || filter.toLowerCase() == 'toda a loja') filter = null
+			if (!filter || filter.toLowerCase() == 'Toda a Loja') filter = null
 
 			let products = await Product.search({ filter, category })
 
@@ -15,7 +15,7 @@ module.exports = {
 			products = await Promise.all(productsPromise)
 
 			const search = {
-				term: req.query.filter || 'toda a loja',
+				term: req.query.filter || 'Toda a Loja',
 				total: products.length,
 			}
 

@@ -6,14 +6,16 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		{% block head %}
-		<title>Launch Store</title>
+			<title>Launch Store</title>
 		{% endblock %}
-
-		{% include 'parts/style.html' %}
+		{% include 'parts/styles.html' %}
 	</head>
 	<body>
-		{% include 'parts/messages.html' %} {% include 'parts/header.html' %} {% block content %} {%
-		endblock %} {% include 'parts/footer.html' %}
+		{% include 'parts/messages.html' %}
+		{% include 'parts/header.html' %}
+		{% block content %}
+		{% endblock %}
+		{% include 'parts/footer.html' %}
 		<script src="/scripts.js"></script>
 	</body>
 </html>

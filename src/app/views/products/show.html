@@ -1,12 +1,15 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %}
+{% import "parts/card.html" as card %}
 
-<section class="product-single container">
+{% block content %}
+{% call card.render('', 'product-single container') %}
+
 	<div class="gallery">
 		<div class="highlight">
 			{% if not product.files[0] %}
-			<img src="http://placehold.it/500x500?text=PRODUTO SEM FOTO" />
+				<img src="http://placehold.it/500x500?text=PRODUTO SEM FOTO" />
 			{% else %}
-			<img src="{{ product.files[0].src }}" alt="{{ product.files[0].name }}" onclick="Lightbox.open()" />
+				<img src="{{ product.files[0].src }}" alt="{{ product.files[0].name }}" onclick="Lightbox.open()" />
 			{% endif %}
 
 			<div class="lightbox-target" onclick="Lightbox.close()">
@@ -14,8 +17,9 @@
 			</div>
 		</div>
 		<div class="gallery-preview">
-			{% for image in product.files %} <img src="{{ image.src }}" alt="{{ image.name }}" {% if
-			loop.index0 == 0 %} class="active" {% endif %} onclick="ImageGallery.setImage(event)" />
+			{% for image in product.files %}
+				<img src="{{ image.src }}" alt="{{ image.name }}" {% if
+				loop.index0 == 0 %} class="active" {% endif %} onclick="ImageGallery.setImage(event)" />
 			{% endfor %}
 		</div>
 	</div>
@@ -29,22 +33,23 @@
 
 		<div class="price-buy">
 			<div class="price">
-				{{ product.formattedPrice }} {% if product.formattedPrice !== product.formattedOldPrice %}
-				<span class="old">{{ product.formattedOldPrice }}</span>
+				{{ product.formattedPrice }}
+				{% if product.formattedPrice !== product.formattedOldPrice %}
+					<span class="old">{{ product.formattedOldPrice }}</span>
 				{% endif %}
 			</div>
 
 			<div class="buy">
 				{% if product.status == 0 %}
-				<p class="unavailable">Indisponível</p>
+					<p class="unavailable">Indisponível</p>
 				{% elseif product.quantity == 0 %}
-				<p class="unavailable">Fora de Estoque</p>
+					<p class="unavailable">Fora de Estoque</p>
 				{% else %}
-				<button class="button">Comprar</button>
+					<button class="button">Comprar</button>
 				{% endif %}
 			</div>
 		</div>
 	</div>
-</section>
 
+{% endcall %}
 {% endblock content %}

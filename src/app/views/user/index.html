@@ -1,10 +1,10 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %}
+{% import "parts/card.html" as card %}
 
-<section class="user-dashboard container form">
+{% block content %}
+{% call card.render('Detalhes', 'users-dashbord container') %}
+
 	<form method="POST">
-		<div class="header">
-			<h3>Detalhes</h3>
-		</div>
 
 		<div class="fields">{% include 'user/fields.html' %}</div>
 
@@ -20,6 +20,6 @@
 			Delete
 		</button>
 	</form>
-</section>
 
+{% endcall %}
 {% endblock %}
