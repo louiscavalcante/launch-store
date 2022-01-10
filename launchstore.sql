@@ -245,8 +245,8 @@ COPY public.files (id, name, path, product_id) FROM stdin;
 --
 
 COPY public.products (id, category_id, user_id, name, description, old_price, price, quantity, status, created_at, updated_at) FROM stdin;
-1	1	35	Notebook Acer Aspire 3	- Modelo: A315-23-R6HC\r\n- AMD Ryzen 5\r\n- Gráfico integrado AMD Radeon Vega 8\r\n- 8GB RAM\r\n- 512GB SSD	315999	315999	0	1	2021-11-05 10:25:21.729615	2021-11-11 01:39:07.611532
-2	1	35	Redmi Note 10 64GB 4GB RAM - Green	- Super AMOLED de 6,35 polegadas\r\n- 450 nits (tipo), 1100 nits (pico)\r\n- Corning Gorilla Glass 3\r\n- 64 GB de RAM | Qualcomm SDM678 Snapdragon 678 (11 nm)\r\n- Octa-core (2 x 2,2 GHz Kryo 460 Gold e 6 x 1,7 GHz Kryo 460 Silver)\r\n- Li-Po 5000 mAh, no removível\r\n- Carregamento rápido de 33 W, 50% em 25 minutos, 100% em 74 minutos\r\n- Celulares desbloqueados de fábrica so compatíveis com a maioria das operadoras GSM.\r\n- Esteja ciente de que no so compatíveis com operadoras CDMA	119999	109999	10	1	2021-11-05 11:36:14.062026	2021-11-11 01:39:10.501291
+1	1	35	Notebook Acer Aspire 3	- Modelo: A315-23-R6HC\r\n- AMD Ryzen 5\r\n- Gráfico integrado AMD Radeon Vega 8\r\n- 8GB RAM\r\n- 512GB SSD	315999	315999	0	0	2021-11-05 10:25:21.729615	2022-01-08 04:41:43.861414
+2	1	35	Redmi Note 10 64GB 4GB RAM - Green	- Super AMOLED de 6,35 polegadas\r\n- 450 nits (tipo), 1100 nits (pico)\r\n- Corning Gorilla Glass 3\r\n- 64 GB de RAM | Qualcomm SDM678 Snapdragon 678 (11 nm)\r\n- Octa-core (2 x 2,2 GHz Kryo 460 Gold e 6 x 1,7 GHz Kryo 460 Silver)\r\n- Li-Po 5000 mAh, no removível\r\n- Carregamento rápido de 33 W, 50% em 25 minutos, 100% em 74 minutos\r\n- Celulares desbloqueados de fábrica so compatíveis com a maioria das operadoras GSM.\r\n- Esteja ciente de que no so compatíveis com operadoras CDMA	109999	109999	10	1	2021-11-05 11:36:14.062026	2022-01-08 05:37:20.077967
 \.
 
 
@@ -263,7 +263,7 @@ COPY public.session (sid, sess, expire) FROM stdin;
 --
 
 COPY public.users (id, name, email, password, cpf_cnpj, cep, address, created_at, updated_at, reset_token, reset_token_expires) FROM stdin;
-35	Luiz Cavalcante	luiz@test.com	553246736447566b583138376f36366b4d755375305135595a5461375843462b4a2f723459352b305031593d	29384908320843	32908409	endereco	2021-11-11 00:14:50.559782	2021-11-11 00:14:50.559782	24a384ab99267777200e7305a53cce8d424a7c48	1640013531941
+35	Luiz Cavalcante	luiz@test.com	553246736447566b583139476c31336b7564537769697a69454d7a51785544797a4d70597a594b477a62513d	29384908320843	32908409	endereco	2021-11-11 00:14:50.559782	2021-11-11 00:14:50.559782	42043d503f306e331165ea3800856f5c8c44475b	1641430986316
 \.
 
 
@@ -278,21 +278,21 @@ SELECT pg_catalog.setval('public.categories_id_seq', 3, true);
 -- Name: files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.files_id_seq', 31, true);
+SELECT pg_catalog.setval('public.files_id_seq', 49, true);
 
 
 --
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 14, true);
+SELECT pg_catalog.setval('public.products_id_seq', 33, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 40, true);
+SELECT pg_catalog.setval('public.users_id_seq', 61, true);
 
 
 --

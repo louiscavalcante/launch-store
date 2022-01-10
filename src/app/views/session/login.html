@@ -1,10 +1,10 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %}
+{% import "parts/card.html" as card %}
 
-<section class="login container form">
+{% block content %}
+{% call card.render('Entrar', 'login container') %}
+
 	<form action="/users/login" method="POST" >
-		<div class="header">
-			<h3>Entrar</h3>
-		</div>
 
 		<div class="fields">{% include 'session/fields.html' %}</div>
 
@@ -21,7 +21,7 @@
 			</li>
 		</ul>
 	</div>
-</section>
 
+{% endcall %}
 {% endblock %}
 

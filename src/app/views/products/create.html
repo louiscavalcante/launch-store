@@ -1,15 +1,15 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %}
+{% import "parts/card.html" as card %}
 
-<section class="container form">
+{% block content %}
+{% call card.render('Cadastrar Produto', 'product-create container') %}
+
 	<form action="/products" method="POST" enctype="multipart/form-data">
-		<div class="header">
-			<h3>Cadastrar Produto</h3>
-		</div>
 
 		<div class="fields">{% include 'products/fields.html' %}</div>
 
-		<button class="button" type="submit">Salvar</button>
+		<button class="button" type="submit" onclick="Validate.allFields(event)">Salvar</button>
 	</form>
-</section>
 
+{% endcall %}
 {% endblock %}

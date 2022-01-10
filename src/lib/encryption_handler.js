@@ -1,4 +1,5 @@
 const CryptoJS = require('crypto-js')
+require('dotenv').config()
 
 // EMCRYPTION_KEY Must be 256 bits (32 characters) inside .env file
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY
