@@ -82,7 +82,7 @@ const Cart = {
 		return this
 	},
 	getCartItem(productId) {
-		return this.items.find(item => item.product.id === productId)
+		return this.items.find(item => item.product.id == productId)
 	},
 }
 
