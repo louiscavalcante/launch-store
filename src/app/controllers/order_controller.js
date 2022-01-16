@@ -1,10 +1,10 @@
 const LoadProductService = require('../services/load_product_service.js')
+const LoadOrderService = require('../services/load_order_service.js')
 const User = require('../models/user.js')
 const Order = require('../models/order.js')
 
 const mailer = require('../../lib/mailer.js')
 const Cart = require('../../lib/cart.js')
-const { formatPrice, date } = require('../../lib/utils.js')
 
 const email = (seller, product, buyer) => `
 <h2>Olá, ${seller.name}</h2>
@@ -25,46 +25,32 @@ const email = (seller, product, buyer) => `
 
 module.exports = {
 	async index(req, res) {
-		let orders = await Order.findAll({ where: { buyer_id: req.session.userId } })
-
-		const getOrdersPromise = orders.map(async order => {
-			order.product = await LoadProductService.load('products', {
-				where: { id: order.product_id },
-			})
-
-			order.buyer = await User.findOne({ where: { id: order.buyer_id } })
-
-			order.seller = await User.findOne({ where: { id: order.seller_id } })
-
-			order.formattedPrice = formatPrice(order.price)
-			order.formattedTotal = formatPrice(order.total)
-
-			const statuses = {
-				open: 'Aberto',
-				sold: 'Vendido',
-				canceled: 'Cancelado',
-			}
-
-			order.formattedStatus = statuses[order.status]
-
-			const updatedAt = date(order.updated_at)
-			order.formattedUpdatedAt =
-				`${order.formattedStatus} em ${updatedAt.day}/${updatedAt.month}/${updatedAt.year} às ` +
-				`${updatedAt.hour}`.padStart(2, '0') +
-				`:${updatedAt.minutes}`.padStart(2, '0')
-
-			return order
+		const orders = await LoadOrderService.load('orders', {
+			where: { buyer_id: req.session.userId },
 		})
 
-		orders = await Promise.all(getOrdersPromise)
-
 		return res.render('orders/index', { orders })
+	},
+	async sales(req, res) {
+		const sales = await LoadOrderService.load('orders', {
+			where: { seller_id: req.session.userId },
+		})
+
+		return res.render('orders/sales', { sales })
+	},
+	async show(req, res) {
+		const order = await LoadOrderService.load('order', {
+			where: { id: req.params.id },
+		})
+
+		return res.render('orders/details', { order })
 	},
 	async post(req, res) {
 		try {
 			const cart = Cart.init(req.session.cart)
 
 			const buyer_id = req.session.userId
+
 			const filteredItems = cart.items.filter(item => item.product.user_id != buyer_id)
 
 			const createOrdersPromise = filteredItems.map(async item => {
@@ -82,10 +68,10 @@ module.exports = {
 					status,
 				})
 
-				product = await LoadProductService.load('product', {
-					where: { id: product_id },
-				})
+				product = await LoadProductService.load('product', { where: { id: product_id }})
+
 				const seller = await User.findOne({ where: { id: seller_id } })
+
 				const buyer = await User.findOne({ where: { id: buyer_id } })
 
 				await mailer.sendMail({
@@ -107,6 +93,38 @@ module.exports = {
 		} catch (err) {
 			console.error(err)
 			return res.render('orders/error')
+		}
+	},
+	async update(req, res) {
+		try {
+			const { id, action } = req.params
+
+			const acceptedActions = ['close', 'cancel']
+
+			if (!acceptedActions.includes(action)) return res.send("Can't do this action")
+
+			const order = await Order.findOne({
+				where: { id },
+			})
+
+			if (!order) return res.send('Order not found')
+
+			if (order.status != 'open') return res.send("Can't do this action")
+
+			const statuses = {
+				close: 'sold',
+				cancel: 'canceled',
+			}
+
+			order.status = statuses[action]
+
+			await Order.update(id, {
+				status: order.status,
+			})
+
+			return res.redirect('/orders/sales')
+		} catch (error) {
+			console.error(error)
 		}
 	},
 }
