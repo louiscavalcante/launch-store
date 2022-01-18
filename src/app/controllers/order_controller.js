@@ -103,9 +103,7 @@ module.exports = {
 
 			if (!acceptedActions.includes(action)) return res.send("Can't do this action")
 
-			const order = await Order.findOne({
-				where: { id },
-			})
+			const order = await Order.findOne({ where: { id } })
 
 			if (!order) return res.send('Order not found')
 

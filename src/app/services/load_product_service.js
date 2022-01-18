@@ -17,6 +17,7 @@ async function format(product) {
 	product.files = files
 	product.formattedOldPrice = formatPrice(product.old_price)
 	product.formattedPrice = formatPrice(product.price)
+	product.formattedCreatedAt = date(product.created_at).format
 
 	const { day, hour, minutes, month } = date(product.updated_at)
 
