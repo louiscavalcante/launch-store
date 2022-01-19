@@ -15,7 +15,7 @@ module.exports = {
 		let timezoneOffset = date.getTimezoneOffset()
 		let formattedTime = hour * 60 + minutes
 
-		timezoneOffset <= 0 ? (formattedTime += timezoneOffset) : (formattedTime -= timezoneOffset)
+		timezoneOffset >= 0 ? (formattedTime += timezoneOffset) : (formattedTime -= timezoneOffset)
 
 		let newHour = formattedTime / 60
 		let correctHour = Math.floor(newHour)
