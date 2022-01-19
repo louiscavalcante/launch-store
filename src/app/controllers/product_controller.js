@@ -116,14 +116,6 @@ module.exports = {
 
 		await Product.delete(req.body.id)
 
-		files.map(file => {
-			try {
-				unlinkSync(file.path)
-			} catch (err) {
-				console.error(err)
-			}
-		})
-
 		return res.redirect('/products/create')
 	},
 }
