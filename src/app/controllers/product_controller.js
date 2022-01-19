@@ -2,7 +2,6 @@ const Product = require('../models/product.js')
 const Category = require('../models/category.js')
 const File = require('../models/file.js')
 const LoadProductService = require('../services/load_product_service.js')
-const { unlinkSync } = require('fs')
 
 module.exports = {
 	async create(req, res) {

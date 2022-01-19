@@ -1,5 +1,5 @@
-const Order = require('../models/Order.js')
-const User = require('../models/User.js')
+const Order = require('../models/order.js')
+const User = require('../models/user.js')
 const LoadProductService = require('./load_product_service.js')
 
 const { formatPrice, date } = require('../../lib/utils.js')
