@@ -8,7 +8,7 @@
             <p>Nenhuma Venda</p>
             <a href="/ads/create" class="button">Comece a Vender</a>
         {%endcall%}
-    {%else%}
+    {% else %}
 
         {% call card.render('Minha Vendas', 'sales orders container') %}
 
@@ -39,8 +39,10 @@
                         Ações <i class="material-icons">arrow_drop_down</i>
                         <ul class="dropdown">
                             <li><a href="/orders/{{sale.id}}">Ver Pedido</a></li>
-                            <li><a href="/products/{{ sale.product.id }}/edit">Editar Produto</a></li>
-                            {%if sale.status == 'open' %}
+							{% if sale.product.deleted_at == null %}
+								<li><a href="/products/{{ sale.product.id }}/edit">Editar Produto</a></li>
+							{% endif %}
+                            {% if sale.status == 'open' %}
                             <li>
                                 <form action="/orders/{{ sale.id }}/close" method="POST">
                                     <button>Marcar Vendido</button>
@@ -51,14 +53,14 @@
                                     <button>Marcar Cancelado</button>
                                 </form>
                             </li>
-                            {%endif%}
+                            {% endif %}
                         </ul>
                     </div>
 
                 </div>
                 {% endfor %}
             </div>
-        {%endcall%}
-    {%endif%}
+        {% endcall %}
+    {% endif %}
 
 {% endblock %}
