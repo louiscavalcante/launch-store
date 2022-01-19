@@ -11,24 +11,13 @@ module.exports = {
 		const hour = date.getHours()
 		const minutes = date.getMinutes()
 
-		// Client timezone offset
-		let timezoneOffset = date.getTimezoneOffset()
-		let formattedTime = hour * 60 + minutes
-
-		timezoneOffset >= 0 ? (formattedTime += timezoneOffset) : (formattedTime -= timezoneOffset)
-
-		let newHour = formattedTime / 60
-		let correctHour = Math.floor(newHour)
-		let newMinutes = (newHour - correctHour) * 60
-		let correctMinutes = Math.round(newMinutes)
-
 		// iso: Needs to return YYYY-MM-DD
 		return {
 			day,
 			month,
 			year,
-			hour: correctHour,
-			minutes: correctMinutes,
+			hour,
+			minutes,
 			iso: `${year}-${month}-${day}`,
 			birthDay: `${day}/${month}`,
 			format: `${day}/${month}/${year}`,
